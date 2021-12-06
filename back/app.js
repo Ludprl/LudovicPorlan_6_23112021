@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+const userRoutes = require("./routes/user");
+
 // Connexion à la base de donnée
 mongoose
     .connect(
@@ -25,8 +27,6 @@ app.use((req, res, next) => {
         "Access-Control-Allow-Methods",
         "GET, POST, PUT, DELETE, PATCH, OPTIONS"
     );
-    res.setHeader("Access-Control-Allow-Credentials", true);
-
     next();
 });
 
@@ -40,5 +40,7 @@ app.use(bodyParser.json());
 /**
  * Routes
  */
+
+app.use("/api/auth", userRoutes);
 
 module.exports = app;
