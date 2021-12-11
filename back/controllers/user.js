@@ -2,7 +2,8 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
-// Enregistrement des nouveaux utilisateurs
+// Sign up avec mdp crypté
+
 exports.signup = (req, res, next) => {
     bcrypt
         .hash(req.body.password, 10)
@@ -20,7 +21,6 @@ exports.signup = (req, res, next) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-// Connecter des utilisateurs existants
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then((user) => {
@@ -42,7 +42,9 @@ exports.login = (req, res, next) => {
                         token: jwt.sign(
                             { userId: user._id },
                             "RANDOM_TOKEN_SECRET",
-                            { expiresIn: "24h" }
+                            {
+                                expiresIn: "24h",
+                            }
                         ),
                     });
                 })
