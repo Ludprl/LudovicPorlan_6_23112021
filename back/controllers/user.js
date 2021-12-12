@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 exports.signup = (req, res, next) => {
     bcrypt
+        // Hash du mot de pass par 10. Plus ce chiffre est grand plus le mdp est sécurisé.
         .hash(req.body.password, 10)
         .then((hash) => {
             const user = new User({
@@ -37,12 +38,15 @@ exports.login = (req, res, next) => {
                             .status(401)
                             .json({ error: "Mot de passe incorrect !" });
                     }
+                    // fonction sign pour encoder une nouveau token.
                     res.status(200).json({
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
+                            // RANDOM_TOKEN_SECRET à remplacer par une chaîne aléatoire beaucoup plus longue pour la production
                             "RANDOM_TOKEN_SECRET",
                             {
+                                // Validité du token
                                 expiresIn: "24h",
                             }
                         ),
