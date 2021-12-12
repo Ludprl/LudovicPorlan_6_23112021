@@ -3,16 +3,18 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
 const helmet = require("helmet");
+// Fichier de configuration
+require("dotenv").config();
 
 const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
 
 // Connexion à la base de donnée
 mongoose
-    .connect(
-        "mongodb+srv://Otucko:1DBCKXBg65nDwdOcuvk2@hottakespiquante.yuuks.mongodb.net/main?retryWrites=true&w=majority",
-        { useNewUrlParser: true, useUnifiedTopology: true }
-    )
+    .connect(process.env.APP_DB_HOST, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch(() => console.log("Connexion à MongoDB échouée !"));
 

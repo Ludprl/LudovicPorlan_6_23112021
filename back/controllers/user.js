@@ -17,7 +17,11 @@ exports.signup = (req, res, next) => {
                 .then(() =>
                     res.status(201).json({ message: "Utilisateur créé !" })
                 )
-                .catch((error) => res.status(400).json({ error }));
+                .catch((error) =>
+                    res.status(400).json({
+                        message: "Un compte existe déjà avec cet Email.",
+                    })
+                );
         })
         .catch((error) => res.status(500).json({ error }));
 };
@@ -28,7 +32,7 @@ exports.login = (req, res, next) => {
             if (!user) {
                 return res
                     .status(401)
-                    .json({ error: "Utilisateur non trouvé !" });
+                    .json({ message: "Utilisateur non trouvé !" });
             }
             bcrypt
                 .compare(req.body.password, user.password)
@@ -43,8 +47,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            // RANDOM_TOKEN_SECRET à remplacer par une chaîne aléatoire beaucoup plus longue pour la production
-                            "RANDOM_TOKEN_SECRET",
+                            process.env.APP_TOKEN,
                             {
                                 // Validité du token
                                 expiresIn: "24h",
