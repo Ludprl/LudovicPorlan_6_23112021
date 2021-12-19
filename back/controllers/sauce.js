@@ -13,6 +13,7 @@ exports.getOneSauce = (req, res, next) => {
         .catch((error) => res.status(404).json({ error }));
 };
 
+// Création d'une nouvelle sauce
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
@@ -32,6 +33,7 @@ exports.createSauce = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 
+// Mise à jour d'une sauce
 exports.updateSauce = (req, res, next) => {
     const sauceObject = req.file
         ? {
@@ -50,6 +52,7 @@ exports.updateSauce = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 
+// Utilisation de unlike pour suppression
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
@@ -70,6 +73,7 @@ exports.likeSauce = (req, res, next) => {
 
     switch (like) {
         case 1:
+            // Si l'utilisateur n'a jamais like on incrémente
             Sauce.updateOne(
                 { _id: sauceId },
                 { $push: { usersLiked: userId }, $inc: { likes: +1 } }
@@ -80,6 +84,7 @@ exports.likeSauce = (req, res, next) => {
             break;
 
         case 0:
+            // Si l'utilisateur a déjà like on décrémente
             Sauce.findOne({ _id: sauceId })
                 .then((sauce) => {
                     if (sauce.usersLiked.includes(userId)) {
@@ -95,6 +100,7 @@ exports.likeSauce = (req, res, next) => {
                             )
                             .catch((error) => res.status(400).json({ error }));
                     }
+                    // Si l'utilisateur n'a jamais dislike on décrémente
                     if (sauce.usersDisliked.includes(userId)) {
                         Sauce.updateOne(
                             { _id: sauceId },
@@ -113,6 +119,7 @@ exports.likeSauce = (req, res, next) => {
             break;
 
         case -1:
+            // Si l'utilisateur n'a jamais dislike on incrémente
             Sauce.updateOne(
                 { _id: sauceId },
                 { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }

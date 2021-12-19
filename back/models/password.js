@@ -1,10 +1,10 @@
 var passwordValidator = require("password-validator");
 
-// Create a schema
+// Creation du schema
 
 var passwordSchema = new passwordValidator();
 
-// Add properties to it
+// Propriétés du schema
 
 passwordSchema
     .is()
