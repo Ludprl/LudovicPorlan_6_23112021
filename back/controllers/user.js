@@ -19,13 +19,15 @@ exports.signup = (req, res, next) => {
                 )
                 .catch((error) =>
                     res.status(400).json({
-                        message: "Un compte existe déjà avec cet Email.",
+                        message:
+                            "Cette adresse email est utilisée par un autre compte.",
                     })
                 );
         })
         .catch((error) => res.status(500).json({ error }));
 };
 
+// login de l'utilisateur.
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then((user) => {
