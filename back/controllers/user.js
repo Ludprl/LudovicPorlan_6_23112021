@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 exports.signup = (req, res, next) => {
     bcrypt
-        // Hash du mot de pass par 10. Plus ce chiffre est grand plus le mdp est sécurisé.
+        // Hash du mot de pass par 10.
         .hash(req.body.password, 10)
         .then((hash) => {
             const user = new User({
